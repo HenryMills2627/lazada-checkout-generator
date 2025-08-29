@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lazada Checkout Link Generator</title>
+    <meta name="description" content="Tạo link checkout Lazada nhanh chóng từ itemID và skuID - Công cụ miễn phí, dễ sử dụng">
+    <meta name="keywords" content="Lazada, checkout, link generator, Vietnam, e-commerce, shopping cart">
+    <meta name="author" content="Lazada Tools">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourusername.github.io/lazada-checkout-generator/">
+    <meta property="og:title" content="Lazada Checkout Link Generator">
+    <meta property="og:description" content="Tạo link checkout Lazada nhanh chóng từ itemID và skuID">
+    <meta property="og:image" content="https://yourusername.github.io/lazada-checkout-generator/preview.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yourusername.github.io/lazada-checkout-generator/">
+    <meta property="twitter:title" content="Lazada Checkout Link Generator">
+    <meta property="twitter:description" content="Tạo link checkout Lazada nhanh chóng từ itemID và skuID">
+    <meta property="twitter:image" content="https://yourusername.github.io/lazada-checkout-generator/preview.png">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 18px;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 15px;
+            align-items: end;
+        }
+        
+        .input-field {
+            flex: 1;
+        }
+        
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f, #a8e6cf);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(86, 171, 47, 0.4);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.4);
+        }
+        
+        .cart-items {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        
+        .cart-items h3 {
+            margin-bottom: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .item-card {
+            background: white;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+        
+        .item-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .item-info {
+            flex: 1;
+        }
+        
+        .item-id {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .item-details {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 30px;
+            font-size: 16px;
+        }
+        
+        .result-section {
+            background: #e8f5e8;
+            border: 2px solid #56ab2f;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .result-section h3 {
+            color: #2d5a0f;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .url-output {
+            background: white;
+            border: 1px solid #56ab2f;
+            border-radius: 6px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            word-break: break-all;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .example {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .example h4 {
+            color: #856404;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .example code {
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #495057;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            text-align: center;
+            flex: 1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-weight: bold;
+            font-size: 24px;
+            color: #667eea;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+            font-size: 12px;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .input-row {
+                flex-direction: column;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .header p {
+                font-size: 16px;
+            }
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateX(300px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛒 Lazada Checkout Generator</h1>
+            <p>Tạo link checkout Lazada nhanh chóng và dễ dàng từ itemID và skuID</p>
+        </div>
+        
+        <div class="content">
+            <div class="example">
+                <h4>📋 Hướng dẫn sử dụng:</h4>
+                <p><strong>Bước 1:</strong> Nhập chuỗi theo định dạng: <code>i[ItemID]-s[SkuID]</code></p>
+                <p><strong>Ví dụ:</strong> <code>i3052621263-s14686050335</code></p>
+                <p><strong>Bước 2:</strong> Nhập số lượng sản phẩm</p>
+                <p><strong>Bước 3:</strong> Click "Thêm vào giỏ" và lặp lại nếu có nhiều sản phẩm</p>
+                <p><strong>Bước 4:</strong> Click "Generate Checkout Link" để tạo link</p>
+            </div>
+            
+            <div class="input-group">
+                <label for="itemString">🏷️ Nhập Item String:</label>
+                <div class="input-row">
+                    <div class="input-field">
+                        <input type="text" id="itemString" placeholder="i3052621263-s14686050335" />
+                    </div>
+                    <div class="input-field" style="max-width: 200px;">
+                        <input type="number" id="quantity" placeholder="Số lượng" min="1" value="1" />
+                    </div>
+                    <button class="btn btn-primary" onclick="addItem()">➕ Thêm vào giỏ</button>
+                </div>
+            </div>
+            
+            <div class="cart-items">
+                <h3>🛍️ Giỏ hàng hiện tại</h3>
+                <div id="cartItems" class="empty-cart">
+                    Chưa có sản phẩm nào trong giỏ hàng
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalProducts">0</span>
+                        <div class="stat-label">Sản phẩm khác nhau</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalQuantity">0</span>
+                        <div class="stat-label">Tổng số lượng</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalItems">0</span>
+                        <div class="stat-label">Items trong giỏ</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin: 40px 0;">
+                <button class="btn btn-success" onclick="generateLink()" id="generateBtn" disabled>
+                    🔗 Generate Checkout Link
+                </button>
+                <button class="btn btn-danger" onclick="clearCart()" style="margin-left: 20px;">
+                    🗑️ Xóa tất cả
+                </button>
+            </div>
+            
+            <div id="resultSection" class="result-section" style="display: none;">
+                <h3>✅ Link Checkout đã được tạo thành công!</h3>
+                <div class="url-output" id="urlOutput"></div>
+                <div style="text-align: center;">
+                    <button class="btn btn-primary" onclick="copyToClipboard()" style="margin-right: 15px;">
+                        📋 Copy Link
+                    </button>
+                    <button class="btn btn-success" onclick="openLink()">
+                        🚀 Mở Link Lazada
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>
+            Được tạo bởi <strong>Lazada Tools</strong> | 
+            <a href="https://github.com/yourusername/lazada-checkout-generator" target="_blank">GitHub</a> |
+            <a href="#" onclick="showAbout()">Về chúng tôi</a>
+        </p>
+    </div>
+    
+    <script>
+        let cartItems = [];
+        
+        function parseItemString(itemString) {
+            const regex = /i(\d+)-s(\d+)/;
+            const match = itemString.match(regex);
+            
+            if (!match) {
+                throw new Error('Định dạng không hợp lệ. Vui lòng sử dụng: i[ItemID]-s[SkuID]');
+            }
+            
+            return {
+                itemId: match[1],
+                skuId: match[2]
+            };
+        }
+        
+        function addItem() {
+            const itemStringInput = document.getElementById('itemString');
+            const quantityInput = document.getElementById('quantity');
+            
+            const itemString = itemStringInput.value.trim();
+            const quantity = parseInt(quantityInput.value) || 1;
+            
+            if (!itemString) {
+                showToast('Vui lòng nhập item string!', 'error');
+                return;
+            }
+            
+            try {
+                const parsed = parseItemString(itemString);
+                
+                // Check if this SKU already exists
+                const existingIndex = cartItems.findIndex(item => 
+                    item.itemId === parsed.itemId && item.skuId === parsed.skuId
+                );
+                
+                if (existingIndex !== -1) {
+                    // Update quantity if exists
+                    cartItems[existingIndex].quantity += quantity;
+                    showToast(`Đã cập nhật số lượng cho SKU: ${parsed.skuId}`, 'success');
+                } else {
+                    // Add new item
+                    cartItems.push({
+                        itemId: parsed.itemId,
+                        skuId: parsed.skuId,
+                        quantity: quantity
+                    });
+                    showToast(`Đã thêm sản phẩm vào giỏ hàng!`, 'success');
+                }
+                
+                // Clear inputs
+                itemStringInput.value = '';
+                quantityInput.value = '1';
+                itemStringInput.focus();
+                
+                updateCartDisplay();
+                updateStats();
+                
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        }
+        
+        function removeItem(index) {
+            if (confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')) {
+                cartItems.splice(index, 1);
+                updateCartDisplay();
+                updateStats();
+                showToast('Đã xóa sản phẩm khỏi giỏ hàng!', 'info');
+            }
+        }
+        
+        function updateCartDisplay() {
+            const cartContainer = document.getElementById('cartItems');
+            const generateBtn = document.getElementById('generateBtn');
+            
+            if (cartItems.length === 0) {
+                cartContainer.innerHTML = '<div class="empty-cart">Chưa có sản phẩm nào trong giỏ hàng</div>';
+                generateBtn.disabled = true;
+                return;
+            }
+            
+            generateBtn.disabled = false;
+            
+            const itemsHtml = cartItems.map((item, index) => `
+                <div class="item-card">
+                    <div class="item-info">
+                        <div class="item-id">Product ID: ${item.itemId}</div>
+                        <div class="item-details">SKU: ${item.skuId} • Số lượng: <strong>${item.quantity}</strong></div>
+                    </div>
+                    <button class="btn btn-danger" onclick="removeItem(${index})">❌ Xóa</button>
+                </div>
+            `).join('');
+            
+            cartContainer.innerHTML = itemsHtml;
+        }
+        
+        function updateStats() {
+            const totalProducts = new Set(cartItems.map(item => item.itemId)).size;
+            const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+            const totalItems = cartItems.length;
+            
+            document.getElementById('totalProducts').textContent = totalProducts;
+            document.getElementById('totalQuantity').textContent = totalQuantity;
+            document.getElementById('totalItems').textContent = totalItems;
+        }
+        
+        function generateLink() {
+            if (cartItems.length === 0) {
+                showToast('Giỏ hàng trống! Vui lòng thêm sản phẩm trước.', 'error');
+                return;
+            }
+            
+            const generateBtn = document.getElementById('generateBtn');
+            const originalText = generateBtn.innerHTML;
+            
+            // Show loading
+            generateBtn.innerHTML = '<span class="loading"></span> Đang tạo link...';
+            generateBtn.disabled = true;
+            
+            setTimeout(() => {
+                const buyParams = {
+                    items: cartItems
+                };
+                
+                const jsonString = JSON.stringify(buyParams);
+                const encodedParams = encodeURIComponent(jsonString);
+                
+                const baseUrl = 'https://www.lazada.vn/wow/gcp/vn/trade/shipping';
+                const fullUrl = `${baseUrl}?buyParams=${encodedParams}&from_pdp_buy_now=1&pwa_true_login=1`;
+                
+                document.getElementById('urlOutput').textContent = fullUrl;
+                document.getElementById('resultSection').style.display = 'block';
+                
+                // Store for copy/open functions
+                window.generatedUrl = fullUrl;
+                
+                // Restore button
+                generateBtn.innerHTML = originalText;
+                generateBtn.disabled = false;
+                
+                showToast('✅ Link checkout đã được tạo thành công!', 'success');
+                
+                // Scroll to result
+                document.getElementById('resultSection').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+            }, 1000);
+        }
+        
+        function copyToClipboard() {
+            if (window.generatedUrl) {
+                navigator.clipboard.writeText(window.generatedUrl).then(() => {
+                    showToast('✅ Đã copy link vào clipboard!', 'success');
+                }).catch(() => {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = window.generatedUrl;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    showToast('✅ Đã copy link vào clipboard!', 'success');
+                });
+            }
+        }
+        
+        function openLink() {
+            if (window.generatedUrl) {
+                window.open(window.generatedUrl, '_blank');
+                showToast('🚀 Đang mở Lazada...', 'info');
+            }
+        }
+        
+        function clearCart() {
+            if (cartItems.length === 0) {
+                showToast('Giỏ hàng đã trống!', 'info');
+                return;
+            }
+            
+            if (confirm('Bạn có chắc muốn xóa tất cả sản phẩm trong giỏ hàng?')) {
+                cartItems = [];
+                updateCartDisplay();
+                updateStats();
+                document.getElementById('resultSection').style.display = 'none';
+                showToast('🗑️ Đã xóa tất cả sản phẩm!', 'info');
+            }
+        }
+        
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            
+            if (type === 'error') {
+                toast.style.background = '#dc3545';
+            } else if (type === 'info') {
+                toast.style.background = '#17a2b8';
+            }
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 100);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
+        }
+        
+        function showAbout() {
+            alert('Lazada Checkout Generator v1.0\n\nCông cụ miễn phí giúp tạo link checkout Lazada nhanh chóng từ itemID và skuID.\n\nPhát triển bởi Lazada Tools Team\nGitHub: https://github.com/yourusername/lazada-checkout-generator');
+        }
+        
+        // Allow Enter key to add items
+        document.getElementById('itemString').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addItem();
+            }
+        });
+        
+        document.getElementById('quantity').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addItem();
+            }
+        });
+        
+        // Initialize
+        updateStats();
+        
+        // Focus on item string input when page loads
+        window.addEventListener('load', () => {
+            document.getElementById('itemString').focus();
+        });
+        
+        // Analytics (optional - replace with your tracking code)
+        // gtag('config', 'GA_TRACKING_ID');
+    </script>
+</body>
+</html>
